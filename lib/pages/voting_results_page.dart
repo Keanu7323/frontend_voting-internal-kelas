@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/voting.dart';
+
 import '../models/user.dart';
+import '../models/voting.dart';
 import '../providers/voting_provider.dart';
 import '../theme.dart';
 
@@ -19,17 +20,17 @@ class _VotingResultsPageState extends State<VotingResultsPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<VotingProvider>(context, listen: false)
-          .loadVotingResults(widget.voting.id);
+      Provider.of<VotingProvider>(
+        context,
+        listen: false,
+      ).loadVotingResults(widget.voting.id);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Hasil ${widget.voting.title}'),
-      ),
+      appBar: AppBar(title: Text('Hasil ${widget.voting.title}')),
       body: Consumer<VotingProvider>(
         builder: (context, provider, child) {
           final results = provider.getVotingResults(widget.voting.id);
@@ -47,7 +48,10 @@ class _VotingResultsPageState extends State<VotingResultsPage> {
             );
           }
 
-          final totalVotes = results.fold(0, (sum, result) => sum + result.count);
+          final totalVotes = results.fold(
+            0,
+            (sum, result) => sum + result.count,
+          );
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -71,13 +75,19 @@ class _VotingResultsPageState extends State<VotingResultsPage> {
                           const SizedBox(height: 8),
                           Text(
                             widget.voting.description,
-                            style: AppTextStyle.subtitle.copyWith(color: Colors.grey[600]),
+                            style: AppTextStyle.subtitle.copyWith(
+                              color: Colors.grey[600],
+                            ),
                           ),
                         ],
                         const SizedBox(height: 16),
                         Row(
                           children: [
-                            Icon(Icons.people, color: AppColors.primary, size: 20),
+                            Icon(
+                              Icons.people,
+                              color: AppColors.primary,
+                              size: 20,
+                            ),
                             const SizedBox(width: 8),
                             Text(
                               'Total Suara: $totalVotes',
@@ -99,7 +109,10 @@ class _VotingResultsPageState extends State<VotingResultsPage> {
                 ),
                 const SizedBox(height: 12),
 
-                ...results.map((result) => _buildResultCard(result, totalVotes)),
+                ...results.asMap().entries.map(
+                  (entry) =>
+                      _buildResultCard(entry.value, totalVotes, entry.key),
+                ),
 
                 const SizedBox(height: 24),
 
@@ -119,7 +132,13 @@ class _VotingResultsPageState extends State<VotingResultsPage> {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        ...results.map((result) => _buildBarChart(result, totalVotes)),
+                        ...results.asMap().entries.map(
+                          (entry) => _buildBarChart(
+                            entry.value,
+                            totalVotes,
+                            entry.key,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -132,7 +151,7 @@ class _VotingResultsPageState extends State<VotingResultsPage> {
     );
   }
 
-  Widget _buildResultCard(VoteResult result, int totalVotes) {
+  Widget _buildResultCard(VoteResult result, int totalVotes, int index) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       margin: const EdgeInsets.symmetric(vertical: 4),
@@ -161,7 +180,7 @@ class _VotingResultsPageState extends State<VotingResultsPage> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: _getColorForIndex(results.indexOf(result)),
+                color: _getColorForIndex(index),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Text(
@@ -178,7 +197,7 @@ class _VotingResultsPageState extends State<VotingResultsPage> {
     );
   }
 
-  Widget _buildBarChart(VoteResult result, int totalVotes) {
+  Widget _buildBarChart(VoteResult result, int totalVotes, int index) {
     final percentage = totalVotes > 0 ? result.percentage : 0.0;
 
     return Padding(
@@ -217,7 +236,7 @@ class _VotingResultsPageState extends State<VotingResultsPage> {
               widthFactor: percentage / 100,
               child: Container(
                 decoration: BoxDecoration(
-                  color: _getColorForIndex(results.indexOf(result)),
+                  color: _getColorForIndex(index),
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),

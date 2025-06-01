@@ -1,17 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/voting_provider.dart';
-import 'home_page.dart';
+
+import '../theme.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_textfield.dart';
-import '../theme.dart';
+import 'home_page.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+
+  @override
+  void initState() {
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final TextEditingController controller = TextEditingController();
+    // final TextEditingController controller = TextEditingController();
 
     return Scaffold(
       body: Center(
@@ -24,24 +45,36 @@ class LoginPage extends StatelessWidget {
               const SizedBox(height: 16),
               Text('VoteIt', style: AppTextStyle.title),
               const SizedBox(height: 32),
+
               CustomTextField(
-                hint: 'Masukkan Nama Anda',
-                controller: controller,  // <-- Penting!
+                label: 'Email',
+                hint: 'Masukan Email Anda',
+                keyboardType: TextInputType.emailAddress,
+                controller: _emailController,
+              ),
+              CustomTextField(
+                label: 'Password',
+                hint: 'Masukan Password Anda',
+                isPassword: true,
+                controller: _passwordController,
               ),
               const SizedBox(height: 24),
               CustomButton(
                 label: 'Masuk',
                 onPressed: () {
-                  print('Nama yang dimasukkan: ${controller.text}');
-                  if (controller.text.isNotEmpty) {
-                    Provider.of<VotingProvider>(context, listen: false)
-                        .login(controller.text);
+                  // print('Nama yang dimasukkan: ${controller.text}');
+                  if (_emailController.text.isNotEmpty &&
+                      _passwordController.text.isNotEmpty) {
+                    // Provider.of<VotingProvider>(context, listen: false).login(
+                    //   email: _emailController.text,
+                    //   password: _passwordController.text,
+                    // );
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (_) => const HomePage()),
                     );
                   } else {
-                    print('Nama kosong, tidak bisa login');
+                    print('Email atau Password kosong, tidak bisa login');
                   }
                 },
               ),

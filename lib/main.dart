@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'providers/voting_provider.dart';
+
 import 'pages/auth_page.dart';
 import 'pages/home_page.dart';
+import 'providers/voting_provider.dart';
 import 'theme.dart';
 
 void main() {
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
       title: 'Voting Internal',
       theme: ThemeData(
         primaryColor: AppColors.primary,
-        scaffoldBackgroundColor: AppColors.bgLight,
+        // scaffoldBackgroundColor: AppColors.bgLight,
+        scaffoldBackgroundColor: Colors.white,
         fontFamily: 'Nunito',
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
@@ -79,11 +81,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.how_to_vote,
-              size: 100,
-              color: Colors.white,
-            ),
+            Icon(Icons.how_to_vote, size: 100, color: Colors.white),
             const SizedBox(height: 24),
             Text(
               'VoteIt',
@@ -95,9 +93,7 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: 8),
             Text(
               'Sistem Voting Internal',
-              style: AppTextStyle.subtitle.copyWith(
-                color: Colors.white70,
-              ),
+              style: AppTextStyle.subtitle.copyWith(color: Colors.white70),
             ),
             const SizedBox(height: 48),
             const CircularProgressIndicator(
