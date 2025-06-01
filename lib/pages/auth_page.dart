@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../providers/voting_provider.dart';
+import '../theme.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_textfield.dart';
-import '../theme.dart';
 import 'home_page.dart';
 
 class AuthPage extends StatefulWidget {
@@ -20,7 +21,8 @@ class _AuthPageState extends State<AuthPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   @override
   void dispose() {
@@ -78,10 +80,7 @@ class _AuthPageState extends State<AuthPage> {
       // Error handling is done in the provider, just show snackbar
       if (provider.error != null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(provider.error!),
-            backgroundColor: Colors.red,
-          ),
+          SnackBar(content: Text(provider.error!), backgroundColor: Colors.red),
         );
         provider.clearError();
       }
@@ -141,23 +140,22 @@ class _AuthPageState extends State<AuthPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.how_to_vote,
-                      size: 80,
-                      color: AppColors.primary,
-                    ),
+                    Icon(Icons.how_to_vote, size: 80, color: AppColors.primary),
                     const SizedBox(height: 16),
                     Text('VoteIt', style: AppTextStyle.title),
                     const SizedBox(height: 8),
                     Text(
                       _isLogin ? 'Masuk ke akun Anda' : 'Buat akun baru',
-                      style: AppTextStyle.subtitle.copyWith(color: Colors.grey[600]),
+                      style: AppTextStyle.subtitle.copyWith(
+                        color: Colors.grey[600],
+                      ),
                     ),
                     const SizedBox(height: 32),
 
                     if (!_isLogin) ...[
                       CustomTextField(
-                        hint: 'Nama Lengkap',
+                        label: 'Nama Lengkap',
+                        hint: 'Masukkan Nama Lengkap Anda',
                         controller: _nameController,
                         validator: _validateName,
                       ),
@@ -165,7 +163,8 @@ class _AuthPageState extends State<AuthPage> {
                     ],
 
                     CustomTextField(
-                      hint: 'Email',
+                      label: 'Email',
+                      hint: 'Masukkan Email Anda',
                       controller: _emailController,
                       validator: _validateEmail,
                       keyboardType: TextInputType.emailAddress,
@@ -173,18 +172,20 @@ class _AuthPageState extends State<AuthPage> {
                     const SizedBox(height: 16),
 
                     CustomTextField(
-                      hint: 'Password',
+                      label: 'Password',
+                      hint: 'Masukkan Password Anda',
                       controller: _passwordController,
-                      obscure: true,
+                      isPassword: true,
                       validator: _validatePassword,
                     ),
 
                     if (!_isLogin) ...[
                       const SizedBox(height: 16),
                       CustomTextField(
+                        label: 'password',
                         hint: 'Konfirmasi Password',
                         controller: _confirmPasswordController,
-                        obscure: true,
+                        isPassword: true,
                         validator: _validateConfirmPassword,
                       ),
                     ],
@@ -192,9 +193,10 @@ class _AuthPageState extends State<AuthPage> {
                     const SizedBox(height: 24),
 
                     CustomButton(
-                      label: provider.isLoading
-                          ? 'Loading...'
-                          : (_isLogin ? 'Masuk' : 'Daftar'),
+                      label:
+                          provider.isLoading
+                              ? 'Loading...'
+                              : (_isLogin ? 'Masuk' : 'Daftar'),
                       onPressed: provider.isLoading ? () {} : _submit,
                     ),
 
