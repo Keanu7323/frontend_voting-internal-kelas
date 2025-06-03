@@ -50,18 +50,17 @@ class VotingProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> login({
+  Future<bool> login(
+    String? text, {
     required String email,
     required String password,
+    required String name,
   }) async {
     _setLoading(true);
     _setError(null);
 
     try {
-      final result = await ApiService.login(
-        email: email,
-        password: password,
-      );
+      final result = await ApiService.login(email: email, password: password);
 
       if (result['success']) {
         _user = result['user'];
@@ -133,10 +132,7 @@ class VotingProvider extends ChangeNotifier {
 
   Future<void> _loadInitialData() async {
     try {
-      await Future.wait([
-        loadVotings(),
-        loadUserVotes(),
-      ]);
+      await Future.wait([loadVotings(), loadUserVotes()]);
     } catch (e) {
       _setError(e.toString());
     }
@@ -210,7 +206,8 @@ class VotingProvider extends ChangeNotifier {
 
   String? getUserVote(String votingId) => _userVotes[votingId];
 
-  List<VoteResult>? getVotingResults(String votingId) => _votingResults[votingId];
+  List<VoteResult>? getVotingResults(String votingId) =>
+      _votingResults[votingId];
 
   void _setLoading(bool loading) {
     _isLoading = loading;

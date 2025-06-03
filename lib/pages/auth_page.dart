@@ -52,8 +52,10 @@ class _AuthPageState extends State<AuthPage> {
 
     if (_isLogin) {
       success = await provider.login(
+        '',
         email: _emailController.text.trim(),
         password: _passwordController.text,
+        name: 'test',
       );
     } else {
       success = await provider.register(
@@ -65,6 +67,8 @@ class _AuthPageState extends State<AuthPage> {
       if (success) {
         // Auto login after successful registration
         success = await provider.login(
+          '',
+          name: 'txt',
           email: _emailController.text.trim(),
           password: _passwordController.text,
         );
